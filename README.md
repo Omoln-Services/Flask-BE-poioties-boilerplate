@@ -6,7 +6,7 @@ The boilerplates should contain the following
 - Authentication (including social authentication) + magic link authentication + in-app authentication screens (e.g change password)
 - Messaging (email), including default templates and using background processes
 - Payments (Stripe, Flutterwave integration, LemonSqueezy), internal and external
-- Users & Organisations
+- Users
 - Manage Users
 - Superadmin interface (users, orgs, payments, activity log)
 - Settings page
@@ -25,7 +25,6 @@ The boilerplates should contain the following
 - Chart page with chart of data
 - Content Edit Page
 - Notifications
-- Blog
 - Invite Link
 - Language and Region
 - Email Template Management in the Superadmin (html)
