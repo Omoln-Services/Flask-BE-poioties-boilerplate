@@ -1,3 +1,17 @@
+# Get Started
+Initiate Virtual Environment with command:
+- python3 -m venv venv
+Start Envirnoment with command:
+- source venv/bin/activate
+Deactivate Environment with command:
+- deactivate
+Install packages in requirements.txt with command:
+- pip3 install -r requirements.txt
+
+Start environment with command:
+- python3 app.py 
+
+
 # Contents of each Boilerplate
 
 The boilerplates should contain the following
@@ -42,7 +56,6 @@ The boilerplates should contain the following
 Each boilerplate must contain instructions on how to keep your code as decoupled as possible, so it is easy to remove things not needed. Each boilerplate must contain the standards used in coding. Each boilerplate must contain a license file.
 
 # How to contribute code
-
 
 
 # References
