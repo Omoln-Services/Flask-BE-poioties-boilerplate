@@ -41,7 +41,7 @@ def create_app():
 
     @app.route("/")
     def hello_world():
-        return "<h1>Welcome to Poioties Api {version 0.1.0}</h1>"
+        return "<p>Welcome to Poioties Api {version 0.1.0}</p>"
 
     # Configure CORS to allow requests from any origin
     CORS(app, supports_credentials=True)

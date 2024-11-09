@@ -57,7 +57,7 @@ The boilerplates should contain the following
 - Push Notifications
   
 # Notes
-Each boilerplate must contain instructions on how to keep your code as decoupled as possible, so it is easy to remove things not needed. Each boilerplate must contain the standards used in coding. Each boilerplate must contain a license file.
+boilerplate must contain instructions on how to keep your code as decoupled as possible, so it is easy to remove things not needed. boilerplate must contain the standards used in coding. boilerplate must contain a license file.
 
 # How to contribute code
 
