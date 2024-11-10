@@ -6,24 +6,18 @@ name: Flask Poioties CI
 on:
   # Triggers the workflow on push or pull request events for both "main" and "develop" branches
   push:
-    branches:
-      - "main" 
-      - "develop"
-  paths:
-      - "api/v1/**"  
+    branches: ["main", "develop"]
+  paths: ["api/**", "test/**"]
   pull_request:
-    branches:
-      - "main"  
-      - "develop"
-  paths:
-      - "api/v1/**"
+    branches: ["main", "develop"]
+  paths: ["api/**", "test/**"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+ permissions:
+  contents: read
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains two jobs Test and lint
   test-and-lint:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -32,13 +26,13 @@ jobs:
     steps:
       - name: Checkout code
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Runs a single command using the runners shell
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.10"
 
       # Runs a set of commands using the runners shell
       - name: Install dependencies
