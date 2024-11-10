@@ -7,10 +7,10 @@ on:
   # Triggers the workflow on push or pull request events for both "main" and "develop" branches
   push:
     branches: ["main", "develop"]
-    paths: ["api/**", "test/**"]
+    paths: ["api/**", "test/**", "alembic/**"]
   pull_request:
     branches: ["main", "develop"]
-    paths: ["api/**", "test/**"]
+    paths: ["api/**", "test/**", "alembic/**"]
 
 permissions:
   contents: read
