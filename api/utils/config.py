@@ -13,12 +13,24 @@ class Config():
     """
     base class configuration settings for database
     """
-
-    SQLALCHEMY_DATABASE_URI = f"postgresql://{
-        os.getenv('DB_USER')}:{
-        os.getenv('DB_PASSWORD')}@{
-            os.getenv('DB_HOST')}/{
-                os.getenv('DB_NAME')}"
+    
+    # Database URI based on DB_TYPE environment variable
+    DB_TYPE = os.getenv('DB_TYPE')
+        
+    if DB_TYPE == 'postgresql':
+        SQLALCHEMY_DATABASE_URI = f"postgresql://{
+            os.getenv('DB_USER')}:{
+            os.getenv('DB_PASSWORD')}@{
+                os.getenv('DB_HOST')}/{
+                    os.getenv('DB_NAME')}"
+    elif DB_TYPE == 'mysql':
+        SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{
+            os.getenv('DB_USER')}:{
+            os.getenv('DB_PASSWORD')}@{
+                os.getenv('DB_HOST')}/{
+                    os.getenv('DB_NAME')}"
+    else:
+        raise ValueError("Unsupported DB_TYPE. Use 'PostgreSql' or 'MySql'")
                 
     # Disable track modifictions to avoid warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -28,14 +40,12 @@ class DevelopmentConfig(Config):
     """Development configureation clas
     """
     DEGUB = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DB_URL')
 
 
 class TestingConfig(Config):
     """Testing configuration class
     """
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DB_URL')
     DEBUG = True
 
 
@@ -43,7 +53,6 @@ class ProductionConfig(Config):
     """Production configuration class"""
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.getenv('DB_URL')
 
 
 # Mapping config names to their respective classes
@@ -54,5 +63,5 @@ config_map = {
 }
 
 # Set the active configuration based on an environment variable
-active_env = os.getenv("FLASK_ENV", "testing")
+active_env = os.getenv("FLASK_ENV", "development")
 config = config_map[active_env]

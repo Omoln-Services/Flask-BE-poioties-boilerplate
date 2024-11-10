@@ -3,7 +3,7 @@
 # imports
 from flask import Flask
 from flask_restx import Api
-from config import Config
+from api.utils.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 from flask_jwt_extended import JWTManager
@@ -29,22 +29,22 @@ def create_app():
 
     # Load configurations
     app.config.from_object(Config)
-
-    # Initialize the database with the app context
-    db.init_app(app)
-
+    
     # Set the secret key from the .env file using python-decouple
     app.secret_key = config("SECRET_KEY")
 
+    # Initialize the database with the app context
+    db.init_app(app)
+    
     # Initialize JWT Manager
     jwt = JWTManager(app)
+    
+    # Configure CORS to allow requests from any origin
+    CORS(app, supports_credentials=True)
 
     @app.route("/")
     def hello_world():
-        return "<p>Welcome to Poioties Api {version 0.1.0}</p>"
-
-    # Configure CORS to allow requests from any origin
-    CORS(app, supports_credentials=True)
+        return "<p>Welcome to poiótēs Api 🎉{version 0.1.0}</p>"
 
     # Initialize additional apps/extensions if needed
     api.init_app(app)
