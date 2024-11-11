@@ -26,7 +26,7 @@ Start environment with command:
 - python3 app.py 
 
 
-# Contents of each Boilerplate
+# Contents of Boilerplate
 
 The boilerplates should contain the following
 

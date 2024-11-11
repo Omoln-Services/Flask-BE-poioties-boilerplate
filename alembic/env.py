@@ -1,9 +1,19 @@
 from logging.config import fileConfig
+from decouple import config as decouple_config
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
+from app import db
+import importlib
+import pkgutil
+import api.v1.models
 from alembic import context
+
+
+# Dynamically import all modules in the api.v1.models package
+for _, module_name, _ in pkgutil.iter_modules(api.v1.models.__path__):
+    importlib.import_module(f"api.v1.models.{module_name}")
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -13,12 +23,17 @@ config = context.config
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+    
+database_url = decouple_config('DB_URL')
+
+# Set the SQLAlchemy URL dynamically
+config.set_main_option('sqlalchemy.url', database_url)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = db.Model.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
