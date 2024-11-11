@@ -5,6 +5,7 @@ from app import db
 import uuid
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 
 class User(db.Model):
@@ -16,6 +17,7 @@ class User(db.Model):
     last_name = db.Column(db.String(36), nullable=False)
     username = db.Column(db.String(36), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
     avatar_url = db.Column(db.String, nullable=True)
     is_active = db.Column(db.Boolean, server_default="true")
     is_superadmin = db.Column(db.Boolean, server_default="false")
@@ -47,3 +49,11 @@ class User(db.Model):
     def check_password(self, password):
         """Checks the password hash against a plain-text password."""
         return check_password_hash(self.password, password)
+    
+    # validation check for email format
+    def validate_email(self, email):
+        """ a regex expression for a simple email format check
+        """
+        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        if not re.match(email_pattern, email):
+            raise ValueError("Invalid email format")
