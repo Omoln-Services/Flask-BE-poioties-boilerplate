@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
 # imports
-from app import db
-import uuid
+import re
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-import re
+from app import db
+from api.v1.models.base_model import BaseModel
 
 
-class User(db.Model):
+class User(BaseModel):
     """A class that defines users info
     """
     __tablename__ = 'users'
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()), nullable=False)
+    
     first_name = db.Column(db.String(36), nullable=False)
     last_name = db.Column(db.String(36), nullable=False)
     username = db.Column(db.String(36), nullable=False, unique=True)
@@ -23,12 +23,9 @@ class User(db.Model):
     is_superadmin = db.Column(db.Boolean, default="false")
     is_deleted = db.Column(db.Boolean, default="false")
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-
 
     def __repr__(self):
-        return f"<User {self.first_name} {self.last_name}>"
+        return f"<User {self.first_name} {self.last_name} {self.username}>"
     
     def to_dict(self):
         """Convert the user object to a dictionary format, excluding sensitive fields."""
@@ -42,8 +39,6 @@ class User(db.Model):
             "is_superadmin": self.is_superadmin,
             "is_deleted": self.is_deleted,
             "last_login": self.last_login.isoformat() if self.last_login else None,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat()
         }
         return obj_dict
 
