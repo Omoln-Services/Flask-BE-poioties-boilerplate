@@ -19,10 +19,13 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
     avatar_url = db.Column(db.String, nullable=True)
-    is_active = db.Column(db.Boolean, server_default="true")
-    is_superadmin = db.Column(db.Boolean, server_default="false")
-    is_deleted = db.Column(db.Boolean, server_default="false")
+    is_active = db.Column(db.Boolean, default="true")
+    is_superadmin = db.Column(db.Boolean, default="false")
+    is_deleted = db.Column(db.Boolean, default="false")
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
     def __repr__(self):
         return f"<User {self.first_name} {self.last_name}>"
@@ -38,7 +41,9 @@ class User(db.Model):
             "is_active": self.is_active,
             "is_superadmin": self.is_superadmin,
             "is_deleted": self.is_deleted,
-            "last_login": self.last_login.isoformat() if self.last_login else None
+            "last_login": self.last_login.isoformat() if self.last_login else None,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
         }
         return obj_dict
 
