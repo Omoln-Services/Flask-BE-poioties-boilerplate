@@ -3,37 +3,28 @@ from abc import ABC, abstractmethod
 
 class Service(ABC):
     """
-    Abstract base controller class defining structure for CRUD operations.
+    Abstract base service class defining structure for CRUD operations.
     """
     @abstractmethod
-    def post(self):
+    def post(self, *args, **kwargs):
         """Create a new item
         """
         pass
     
     @abstractmethod
-    def get(self):
+    def get(self, *args, **kwargs):
         """Fetch single item 
         """
         pass
     
     @abstractmethod
-    def put(self):
+    def put(self, *args, **kwargs):
         """Update an existing item
         """
         pass
     
     @abstractmethod
-    def patch(self):
-        """ Update existing item
-        """
-        pass
- 
-    @abstractmethod
-    def delete(self, id: int):
-        """delete an existing item by ID
-
-        Args:
-            id (int): item ID
+    def delete(self, *args, **kwargs):
+        """delete an existing item
         """
         pass

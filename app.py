@@ -4,14 +4,14 @@
 from flask import Flask
 from flask_restx import Api
 from api.utils.config import Config
-from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+import logging
+from api.db.database import db
 
 
-# Initialize extensions
-db = SQLAlchemy()
+
 # Create the API instance
 api = Api(
     version="1.0",
@@ -26,18 +26,25 @@ def create_app():
     Initializes the Flask app instance and all its dependencies
     """
     app = Flask(__name__)
-
+    
+    
     # Load configurations
     app.config.from_object(Config)
     
+    # Initialize the database with the app context
+    db.init_app(app)  
+    
     # Set the secret key from the .env file using python-decouple
     app.secret_key = config("SECRET_KEY")
-
-    # Initialize the database with the app context
-    db.init_app(app)
+    
+    print("SQLAlchemy URI:", app.config['SQLALCHEMY_DATABASE_URI'])
     
     # Initialize JWT Manager
     jwt = JWTManager(app)
+    
+    # Import and add Namespaces to the Api
+    from api.v1.routes.users import user_ns
+    api.add_namespace(user_ns, path='/api/v1/users')
     
     # Configure CORS to allow requests from any origin
     CORS(app, supports_credentials=True)
@@ -45,13 +52,30 @@ def create_app():
     @app.route("/")
     def hello_world():
         return "<p>Welcome to poiótēs Api 🎉{version 0.1.0}</p>"
+    
+        
+    @app.route("/test_db")
+    def test_db():
+        # Test querying a simple model to confirm db connection
+        return {"status": "database connected"} if db.engine else {"status": "no database connection"}
 
-    # Initialize additional apps/extensions if needed
-    api.init_app(app)
+    # Setup logging
+    if not app.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        
     
     # Create the database tables
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception as e:
+            print("got the following exeception when attempting db.create_all() in __init__.py:" + str(e))
+        finally:
+            print("db.create_all() in __init__.py was successfully - no execeptions were raised")
+        
+        
+    # Initialize additional apps
+    api.init_app(app)
 
     # Return the Flask app instance
     return app

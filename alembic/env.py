@@ -3,7 +3,7 @@ from decouple import config as decouple_config
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from app import db
+from api.db.database import db
 import importlib
 import pkgutil
 import api.v1.models

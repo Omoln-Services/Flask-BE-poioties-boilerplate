@@ -3,7 +3,7 @@
 
 # Import
 from api.v1.models.base_model import BaseModel
-from app import db
+from api.db.database import db
 
 
 class EmailTemplate(BaseModel):

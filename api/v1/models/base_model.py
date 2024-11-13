@@ -3,7 +3,7 @@
 # Imports
 from datetime import datetime
 import uuid
-from app import db
+from api.db.database import db
 
 
 class BaseModel(db.Model):
@@ -11,11 +11,16 @@ class BaseModel(db.Model):
     """
     # this ensures that this model is not created as a table in the db
     __abstract__ = True
-    
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()), nullable=False)
+
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()),
+        nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     def save(self):
         """Saves the current instance to the database."""
         try:
@@ -24,7 +29,7 @@ class BaseModel(db.Model):
         except Exception as e:
             db.session.rollback()
             raise e
-    
+
     def delete(self):
         """Deletes the current instance from the database."""
         try:
@@ -33,7 +38,7 @@ class BaseModel(db.Model):
         except Exception as e:
             db.session.rollback()
             raise e
-    
+
     def to_dict(self):
         """ returns a dictionary representation of the instance"""
         obj_dict = self.__dict__.copy()
