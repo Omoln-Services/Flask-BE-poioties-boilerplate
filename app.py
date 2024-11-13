@@ -57,22 +57,11 @@ def create_app():
     @app.route("/test_db")
     def test_db():
         # Test querying a simple model to confirm db connection
-        return {"status": "database connected"} if db.engine else {"status": "no database connection"}
-
-    # Setup logging
-    if not app.debug:
-        logging.basicConfig(level=logging.DEBUG)
-        
+        return {"status": "database connected"} if db.engine else {"status": "no database connection"}        
     
     # Create the database tables
     with app.app_context():
-        try:
-            db.create_all()
-        except Exception as e:
-            print("got the following exeception when attempting db.create_all() in __init__.py:" + str(e))
-        finally:
-            print("db.create_all() in __init__.py was successfully - no execeptions were raised")
-        
+        db.create_all()
         
     # Initialize additional apps
     api.init_app(app)
