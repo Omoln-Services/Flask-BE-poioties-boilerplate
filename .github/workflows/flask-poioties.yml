@@ -20,7 +20,7 @@ jobs:
       DB_PASSWORD: VCsrw7S4d874ZSln5TaLJAgG3MmLFFRQ
       DB_HOST: dpg-csqkklrtq21c73dlqfn0-a.oregon-postgres.render.com
       DB_NAME: poioties
-      SQLALCHEMY_DATABASE_URI: "postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}/${{ secrets.DB_NAME }}"
+      SQLALCHEMY_DATABASE_URI:  "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
     
     steps:
       - name: Checkout code
