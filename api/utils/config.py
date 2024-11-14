@@ -9,37 +9,37 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Config():
+class Config:
     """
     base class configuration settings for database
     """
-    
+
     # Load SECRET_KEY from environment variables
-    SECRET_KEY = os.getenv('SECRET_KEY', '')
-    
+    SECRET_KEY = os.getenv("SECRET_KEY", "")
+
     # Database URI based on DB_TYPE environment variable
-    DB_TYPE = os.getenv('DB_TYPE', '').lower()
-        
-    if DB_TYPE == 'postgresql':
+    DB_TYPE = os.getenv("DB_TYPE", "").lower()
+
+    if DB_TYPE == "postgresql":
         SQLALCHEMY_DATABASE_URI = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
-    elif DB_TYPE == 'mysql':
+    elif DB_TYPE == "mysql":
         SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
     else:
         raise ValueError("Unsupported DB_TYPE. Use 'postgresql' or 'mysql'")
-                
+
     # Disable track modifictions to avoid warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(Config):
-    """Development configureation clas
-    """
+    """Development configureation clas"""
+
     DEGUB = True
 
 
 class TestingConfig(Config):
-    """Testing configuration class
-    """
+    """Testing configuration class"""
+
     TESTING = True
     DEBUG = True
 

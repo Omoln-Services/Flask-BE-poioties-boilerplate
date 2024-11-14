@@ -7,17 +7,17 @@ from api.db.database import db
 
 
 class BaseModel(db.Model):
-    """Base model for all other models
-    """
+    """Base model for all other models"""
+
     # this ensures that this model is not created as a table in the db
     __abstract__ = True
 
     id = db.Column(
         db.String(36),
         primary_key=True,
-        default=lambda: str(
-            uuid.uuid4()),
-        nullable=False)
+        default=lambda: str(uuid.uuid4()),
+        nullable=False,
+    )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -40,7 +40,7 @@ class BaseModel(db.Model):
             raise e
 
     def to_dict(self):
-        """ returns a dictionary representation of the instance"""
+        """returns a dictionary representation of the instance"""
         obj_dict = self.__dict__.copy()
         obj_dict.pop("_sa_instance_state", None)
         obj_dict["id"] = self.id

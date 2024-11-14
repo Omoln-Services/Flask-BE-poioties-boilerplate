@@ -11,13 +11,12 @@ import logging
 from api.db.database import db
 
 
-
 # Create the API instance
 api = Api(
     version="1.0",
     title="Poioties API",
     description="Poioties Flask API with Flask-RESTX",
-    doc='/docs'
+    doc="/docs",
 )
 
 
@@ -26,43 +25,46 @@ def create_app():
     Initializes the Flask app instance and all its dependencies
     """
     app = Flask(__name__)
-    
-    
+
     # Load configurations
     app.config.from_object(Config)
-    
+
     # Initialize the database with the app context
-    db.init_app(app)  
-    
+    db.init_app(app)
+
     # Set the secret key from the .env file using python-decouple
     app.secret_key = config("SECRET_KEY")
-    
-    print("SQLAlchemy URI:", app.config['SQLALCHEMY_DATABASE_URI'])
-    
+
+    print("SQLAlchemy URI:", app.config["SQLALCHEMY_DATABASE_URI"])
+
     # Initialize JWT Manager
     jwt = JWTManager(app)
-    
+
     # Import and add Namespaces to the Api
     from api.v1.routes.users import user_ns
-    api.add_namespace(user_ns, path='/api/v1/users')
-    
+
+    api.add_namespace(user_ns, path="/api/v1/users")
+
     # Configure CORS to allow requests from any origin
     CORS(app, supports_credentials=True)
 
     @app.route("/")
     def hello_world():
         return "<p>Welcome to poiótēs Api 🎉{version 0.1.0}</p>"
-    
-        
+
     @app.route("/test_db")
     def test_db():
         # Test querying a simple model to confirm db connection
-        return {"status": "database connected"} if db.engine else {"status": "no database connection"}        
-    
+        return (
+            {"status": "database connected"}
+            if db.engine
+            else {"status": "no database connection"}
+        )
+
     # Create the database tables
     with app.app_context():
         db.create_all()
-        
+
     # Initialize additional apps
     api.init_app(app)
 

@@ -9,9 +9,9 @@ from api.v1.models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """A class that defines users info
-    """
-    __tablename__ = 'users'
+    """A class that defines users info"""
+
+    __tablename__ = "users"
 
     first_name = db.Column(db.String(36), nullable=False)
     last_name = db.Column(db.String(36), nullable=False)
@@ -52,8 +52,7 @@ class User(BaseModel):
 
     # validation check for email format
     def validate_email(self, email):
-        """ a regex expression for a simple email format check
-        """
+        """a regex expression for a simple email format check"""
         email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         if not re.match(email_pattern, email):
             raise ValueError("Invalid email format")

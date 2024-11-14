@@ -6,8 +6,8 @@ from api.db.database import db
 
 
 class Notifications(BaseModel):
-    """Defines the Notifications model requirement
-    """
+    """Defines the Notifications model requirement"""
+
     title = db.Column(db.String, nullable=False)
     message = db.Column(db.Text, nullable=False)
     status = db.Column(db.String, nullable=False)
