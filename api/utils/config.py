@@ -15,7 +15,7 @@ class Config():
     """
     
     # Database URI based on DB_TYPE environment variable
-    DB_TYPE = os.getenv('DB_TYPE')
+    DB_TYPE = os.getenv('DB_TYPE', '').lower()
         
     if DB_TYPE == 'postgresql':
         SQLALCHEMY_DATABASE_URI = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
