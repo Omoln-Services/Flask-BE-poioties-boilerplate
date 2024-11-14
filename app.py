@@ -73,3 +73,7 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=7000, debug=True)
+
+
+
+postgresql://poioties:VCsrw7S4d874ZSln5TaLJAgG3MmLFFRQ@dpg-csqkklrtq21c73dlqfn0-a.oregon-postgres.render.com/poioties
