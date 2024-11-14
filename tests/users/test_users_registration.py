@@ -13,6 +13,9 @@ def client():
     with app.app_context():
         with app.test_client() as client:
             yield client
+    if not app.config.get("SECRET_KEY"):
+        raise ValueError("SECRET_KEY is not set in the environment variables")
+    
 
 
 def test_register_success(mocker, client):

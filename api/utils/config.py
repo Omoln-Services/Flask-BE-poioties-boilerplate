@@ -14,6 +14,9 @@ class Config():
     base class configuration settings for database
     """
     
+    # Load SECRET_KEY from environment variables
+    SECRET_KEY = os.getenv('SECRET_KEY', '')
+    
     # Database URI based on DB_TYPE environment variable
     DB_TYPE = os.getenv('DB_TYPE', '').lower()
         
