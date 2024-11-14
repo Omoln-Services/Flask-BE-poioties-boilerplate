@@ -22,7 +22,7 @@ class Config():
     elif DB_TYPE == 'mysql':
         SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
     else:
-        raise ValueError("Unsupported DB_TYPE. Use 'PostgreSql' or 'MySql'")
+        raise ValueError("Unsupported DB_TYPE. Use 'postgresql' or 'mysql'")
                 
     # Disable track modifictions to avoid warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
