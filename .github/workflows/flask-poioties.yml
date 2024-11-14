@@ -62,5 +62,3 @@ jobs:
       - name: Run autopep8
         run: |
           autopep8 --in-place --aggressive --recursive .
-
-      

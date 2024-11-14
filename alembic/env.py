@@ -3,7 +3,7 @@ from decouple import config as decouple_config
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from app import db
+from api.db.database import db
 import importlib
 import pkgutil
 import api.v1.models
@@ -23,11 +23,11 @@ config = context.config
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-    
-database_url = decouple_config('DB_URL')
+
+database_url = decouple_config("DB_URL")
 
 # Set the SQLAlchemy URL dynamically
-config.set_main_option('sqlalchemy.url', database_url)
+config.set_main_option("sqlalchemy.url", database_url)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -79,9 +79,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

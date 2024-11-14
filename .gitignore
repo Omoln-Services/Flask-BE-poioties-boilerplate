@@ -21,5 +21,4 @@ venv/
 tmp/
 alembic.ini
 .flake8
-.pylintrc 
-pytest.ini 
+.pylintrc
