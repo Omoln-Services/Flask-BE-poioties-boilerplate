@@ -14,6 +14,7 @@ def client():
         with app.test_client() as client:
             yield client
 
+
 def test_register_success(mocker, client):
     """ Mock the user service post method to return successful response """
     mock_response = {
@@ -45,7 +46,6 @@ def test_register_success(mocker, client):
     assert res.status_code == 201
     
 
-
 def test_register_validation_error(mocker, client):
     """ Mock the user_service post method to simulate a validation error response"""
     mock_response = {
@@ -69,8 +69,7 @@ def test_register_validation_error(mocker, client):
     # Assertions to validate response
     assert res.status_code == 400
 
-    
-    
+       
 def test_existing_email_or_username(mocker, client):
     """Mock the user service post method to simulate existing email or username."""
     mock_response = {
@@ -96,9 +95,8 @@ def test_existing_email_or_username(mocker, client):
     
     # Assertions to validate response
     assert res.status_code == 409
-    
-    
-    
+       
+
 def test_register_internal_server_error(mocker, client):
     """Mock the user service post method to simulate an internal server error."""
     mock_response = {
