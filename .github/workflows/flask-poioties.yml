@@ -31,6 +31,13 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Check Environment Variables
+        run: |
+          echo "DB_TYPE: $DB_TYPE"
+          echo "DB_USER: $DB_USER"
+          echo "DB_NAME: $DB_NAME"
+          echo "SQLALCHEMY_DATABASE_URI: $SQLALCHEMY_DATABASE_URI"
+
       - name: Verify DB_TYPE
         run: echo "DB_TYPE is set to $DB_TYPE"
 
@@ -41,6 +48,9 @@ jobs:
           pip install flake8 black pytest
 
       - name: Run Tests
+        env:
+          DB_TYPE: postgresql
+          SQLALCHEMY_DATABASE_URI: "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
         run: |
           pytest tests/
 
