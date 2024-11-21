@@ -55,14 +55,17 @@ class CreateUser(Resource):
 
 
 # Define the nested UserProfileData model
-user_profile_data_model = user_ns.model(name='user profile', model={
-    "id": fields.String(description="User ID"),
-    "created_at": fields.DateTime(description="Account creation date"),
-    "email": fields.String(description="User email address"),
-    "avatar_url": fields.String(description="Avatar URL"),
-    "is_active": fields.Boolean(description="Is the user active?"),
-    "username": fields.String(description="Username"),
-})
+user_profile_data_model = user_ns.model(
+    name="user profile",
+    model={
+        "id": fields.String(description="User ID"),
+        "created_at": fields.DateTime(description="Account creation date"),
+        "email": fields.String(description="User email address"),
+        "avatar_url": fields.String(description="Avatar URL"),
+        "is_active": fields.Boolean(description="Is the user active?"),
+        "username": fields.String(description="Username"),
+    },
+)
 
 
 @user_ns.route("/me")
@@ -70,7 +73,9 @@ class GetUserProfile(Resource):
     """class to get user profile"""
 
     @user_ns.doc(description="Retrieve the authenticated user's profile")
-    @user_ns.response(200, "User profile retrieved successfully", user_profile_data_model)
+    @user_ns.response(
+        200, "User profile retrieved successfully", user_profile_data_model
+    )
     @user_ns.response(401, "Authentication required")
     @user_ns.response(404, "User profile not found")
     @user_ns.response(500, "Internal server error")
@@ -80,15 +85,11 @@ class GetUserProfile(Resource):
         try:
             user_id = get_jwt_identity()
             if not user_id:
-                response = {
-                    "message": "Authentication required"
-                }
+                response = {"message": "Authentication required"}
                 return response, 401
 
             user_profile = user_service.get(user_id=user_id)
             return user_profile
         except Exception as e:
-            response = {
-                "message": "Internal server error", "error": str(e)
-            }
+            response = {"message": "Internal server error", "error": str(e)}
             return response, 500

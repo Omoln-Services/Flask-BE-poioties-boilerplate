@@ -141,15 +141,17 @@ def test_get_user_profile_success(mocker, client):
             "avatar_url": None,
             "is_active": True,
             "username": "skibo555",
-        }
+        },
     }
     headers = {"Authorization": f"Bearer {token}"}
 
-    mocker.patch.object(user_service, "get", return_value=(mock_response, 200), headers=headers)
-    
+    mocker.patch.object(
+        user_service, "get", return_value=(mock_response, 200), headers=headers
+    )
+
     # Send get request to /register route
     res = client.get("/api/v1/users/me", headers=headers)
-    
+
     assert res.status_code == 200
 
 
@@ -163,7 +165,9 @@ def test_get_user_profile_invalid_token(mocker, client):
     }
     headers = {"Authorization": f"Bearer {token}"}
 
-    mocker.patch.object(user_service, "get", return_value=(mock_response, 404), headers=headers)
+    mocker.patch.object(
+        user_service, "get", return_value=(mock_response, 404), headers=headers
+    )
 
     # Send get request to /me route
     res = client.get("/api/v1/users/me", headers=headers)
@@ -173,4 +177,3 @@ def test_get_user_profile_invalid_token(mocker, client):
     print(f"Response Data: {res}")
 
     assert res.status_code == 404
-
