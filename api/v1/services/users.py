@@ -8,7 +8,6 @@ from sqlalchemy.exc import IntegrityError
 from api.core.base.services import Service
 from datetime import datetime, timedelta
 from flask_jwt_extended import create_access_token
-import os
 from api.v1.models.users import User
 from api.db.database import db
 
