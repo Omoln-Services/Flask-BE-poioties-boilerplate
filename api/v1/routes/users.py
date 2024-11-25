@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 
 # Import
-
-from flask import request, session
-from api.v1.services.users import user_service
-from api.v1.models.users import User
-from flask_restx import Namespace, Resource, fields, reqparse
+from flask import request
+from flask_restx import Resource, fields
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-
-user_ns = Namespace("users", description="user related operations")
+from api.v1.services.users import user_service
+from api.utils.success_response import success_response
+from . import user_ns
 
 
 # Define API model for input validation
@@ -40,18 +37,32 @@ class CreateUser(Resource):
         A function that handles users registration
         """
         data = request.get_json()
-
-        # Initialize user registration with data validation within the service
-        response = user_service.post(
-            first_name=data.get("first_name"),
-            last_name=data.get("last_name"),
-            username=data.get("username"),
-            password=data.get("password"),
-            email=data.get("email"),
+                   
+        required_fields = ["first_name", "last_name", "username", "password", "email"]
+        missing_fields = [fields for field in required_fields if not data.get(field)]
+            
+        if missing_fields:
+            return success_response(
+                status_code=400,
+                message="Missing required fields",
+                data={"error": missing_fields}
+            )
+            
+        response = user_service.post(data)
+        
+        if response.get("status_code") in [409, 500]:
+            return success_response(
+                status_code=response["status_code"],
+                message=response["message"],
+                data=response
+            )
+        
+        # Use the UserService to create a new user
+        return success_response(
+            status_code=201,
+            message="User registered successfully",
+            data=response,
         )
-
-        # Return the response generated from user_service
-        return response
 
 
 # Define the nested UserProfileData model

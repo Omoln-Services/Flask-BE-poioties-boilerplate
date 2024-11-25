@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 # imports
-import re
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.db.database import db
+from api.utils.email_validator import validate_email
 from api.v1.models.base_model import BaseModel
 
 
@@ -49,10 +49,7 @@ class User(BaseModel):
     def check_password(self, password):
         """Checks the password hash against a plain-text password."""
         return check_password_hash(self.password, password)
-
-    # validation check for email format
-    def validate_email(self, email):
-        """a regex expression for a simple email format check"""
-        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-        if not re.match(email_pattern, email):
-            raise ValueError("Invalid email format")
+    
+    def validate_email(self):
+        """Validate the user's email."""
+        validate_email(self.email)

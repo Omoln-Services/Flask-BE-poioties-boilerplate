@@ -3,7 +3,7 @@ from flask import abort
 
 def check_model_existence(model, id):
     """Check if a model exists by its ID"""
-    obj = model.Session.get(id)
+    obj = model.query.get(id)
 
     if not obj:
         abort(404, description=f"{model.__name__} does not exist")
