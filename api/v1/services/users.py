@@ -15,18 +15,21 @@ from api.db.database import db
 
 class UserService(Service):
     """User Services"""
+
     def post(self, data):
         """Create a new user with hashed password and validation."""
         try:
             # Check if user exists
             existing_user = (
                 db.session.query(User)
-                .filter((User.username == data["username"]) | (User.email == data["email"]))
+                .filter(
+                    (User.username == data["username"]) | (User.email == data["email"])
+                )
                 .first()
             )
             if existing_user:
                 raise IntegrityError("Username or email already exists.", orig=None)
-            
+
             # Create new user
             user = User(
                 first_name=data["first_name"],
@@ -34,22 +37,22 @@ class UserService(Service):
                 username=data["username"],
                 email=data["email"],
             )
-            
+
             # Hash password
-            user.set_password(data["password"]) 
+            user.set_password(data["password"])
 
             db.session.add(user)
             db.session.commit()
 
             return user.to_dict()
-        
+
         except IntegrityError:
             db.session.rollback()
             return success_response(
                 status_code=409,
                 message="Email address or username already in use.",
             )
-            
+
         except Exception as e:
             db.session.rollback()
             return success_response(
@@ -57,8 +60,7 @@ class UserService(Service):
                 message="Internal server error.",
                 data={"error": str(e)},
             )
-            
-            
+
     # fetch user by ID
     def get(self, user_id):
         """Fetch by ID"""
@@ -83,7 +85,7 @@ class UserService(Service):
         user = check_model_existence(User, user_id)
         if user.is_deleted:
             raise ValueError("User is already deleted.")
-        
+
         user.is_deleted = True
         db.session.commit()
 
@@ -143,6 +145,13 @@ class UserService(Service):
 
             return user_data
 
+        except IntegrityError:
+            db.session.rollback()
+            return success_response(
+                status_code=401,
+                message="Invalid email or password",
+            )
+
         except Exception as e:
             db.session.rollback()
             return success_response(
@@ -160,12 +169,12 @@ class UserService(Service):
         try:
             serializer = URLSafeTimedSerializer(secret_key)
             token = serializer.dumps({"id": user.id}, salt=salt)
-            
+
             # Construct the reset
             base_url = current_app.config.get("FRONTEND_URL", "http://127.0.0.1:7000")
             reset_link = f"{base_url}/api/v1/users/password-reset/verify?token={token}"
             return reset_link
-        
+
         except Exception as e:
             db.session.rollback()
             return success_response(
@@ -179,7 +188,7 @@ class UserService(Service):
         """get user by reset token"""
         secret_key = current_app.config.get("SECRET_KEY")
         salt = current_app.config.get("SALT")
-        
+
         try:
             serializer = URLSafeTimedSerializer(secret_key)
             data = serializer.loads(token, salt=salt)
@@ -189,9 +198,7 @@ class UserService(Service):
             return user
         except Exception as e:
             return success_response(
-                status_code=500,
-                message="Internal Server Error",
-                data={'error': str(e)}
+                status_code=500, message="Internal Server Error", data={"error": str(e)}
             )
 
     @staticmethod
@@ -207,9 +214,7 @@ class UserService(Service):
             return data["id"]
         except Exception as e:
             return success_response(
-                status_code=500,
-                message="Internal Server Error",
-                data={'error': str(e)}
+                status_code=500, message="Internal Server Error", data={"error": str(e)}
             )
 
 

@@ -49,7 +49,7 @@ class User(BaseModel):
     def check_password(self, password):
         """Checks the password hash against a plain-text password."""
         return check_password_hash(self.password, password)
-    
+
     def validate_email(self):
         """Validate the user's email."""
         validate_email(self.email)

@@ -37,26 +37,26 @@ class CreateUser(Resource):
         A function that handles users registration
         """
         data = request.get_json()
-                   
+
         required_fields = ["first_name", "last_name", "username", "password", "email"]
         missing_fields = [fields for field in required_fields if not data.get(field)]
-            
+
         if missing_fields:
             return success_response(
                 status_code=400,
                 message="Missing required fields",
-                data={"error": missing_fields}
+                data={"error": missing_fields},
             )
-            
+
         response = user_service.post(data)
-        
+
         if response.get("status_code") in [409, 500]:
             return success_response(
                 status_code=response["status_code"],
                 message=response["message"],
-                data=response
+                data=response,
             )
-        
+
         # Use the UserService to create a new user
         return success_response(
             status_code=201,

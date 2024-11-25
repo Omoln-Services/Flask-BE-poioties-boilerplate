@@ -29,8 +29,6 @@ def create_app():
     # Set the secret key from the .env file using python-decouple
     app.secret_key = config("SECRET_KEY")
 
-    print("SQLAlchemy URI:", app.config["SQLALCHEMY_DATABASE_URI"])
-
     # Initialize JWT Manager
     jwt = JWTManager(app)
 
