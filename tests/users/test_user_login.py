@@ -28,11 +28,41 @@ def test_user_success_login(mocker, client, mock_user, mock_jwt_token):
     # send request to /register
     res = client.post("/api/v1/users/login", json=payload)
 
-    print(res.get_json())
-
     # Assertions to validate response
     assert res.status_code == 200
     response_json = res.get_json()
 
-    # Verify the presence of token in the response data
+    # Verify the token in the response data
     assert "token" in response_json["data"]
+
+
+
+def test_invalid_credential_login(mocker, client):
+    """Mock the user_service post method to simulate a validation error response"""
+    
+    mock_response = {
+        "status_code": 401,
+        "message": "Invalid email or password",
+        "success": False,
+    }
+
+    mocker.patch.object(user_service, "authenticate", return_value=mock_response)
+
+    # incomplete payload to simulate validation failure
+    payload = {
+        "email": "jone@gmail.com", 
+        "password": "word123"
+    }
+    
+    # Send POST request to /register route
+    res = client.post("api/v1/users/login", json=payload)
+    
+    response_json = res.get_json()
+    
+    print(f"json: {response_json}")
+
+    # Assertions to validate response
+    assert res.status_code == 401
+
+
+
