@@ -81,3 +81,91 @@ def test_missing_email(mocker, client):
         
     # Assertions to validate response
     assert res.status_code == 400
+    
+    
+def test_verify_token_success(mocker, client, mock_user):
+    """Test password reset token verification"""
+    mocker.patch.object(user_service, "verify_reset_token", return_value=mock_user.id)
+    
+    # Define token payload
+    payload = {
+        "token": "valid_token",
+    }
+    
+    # Send request to /password-reset/verify
+    res = client.get("/api/v1/users/password-reset/verify", query_string=payload)
+        
+    # Assertions to validate response
+    assert res.status_code == 200
+    
+    
+    
+def test_verify_token_invalid(mocker, client):
+    """Test password reset token verification with invalid token"""
+    
+    # Mock the behavior of the user service to return None (indicating an invalid token)
+    mocker.patch.object(user_service, "verify_reset_token", return_value=None)
+    
+    # Define invalid token payload
+    payload = {
+        "token": "invalid_token",
+    }
+    
+    # Send request to /password-reset/verify with the invalid token
+    res = client.get("/api/v1/users/password-reset/verify", query_string=payload)
+        
+    # Assertions to validate response
+    assert res.status_code == 404  
+
+
+
+def test_confirm_password_mismatch(mocker, client):
+    """Test password reset confirmation with password mismatch"""
+    # Define payload with mismatched passwords
+    payload = {
+        "token": "valid_token",
+        "new_password": "newpassword123",
+        "confirm_password": "mismatchpassword123"
+    }
+    
+    # Send request to /password-reset/confirm
+    res = client.post("/api/v1/users/password-reset/confirm", json=payload)
+        
+    # Assertions to validate response
+    assert res.status_code == 400
+
+
+
+def test_confirm_password_too_short(mocker, client):
+    """Test password reset confirmation with short password"""
+    # Define payload with too short password
+    payload = {
+        "token": "valid_token",
+        "new_password": "ab",
+        "confirm_password": "ab"
+    }
+    
+    # Send request to /password-reset/confirm
+    res = client.post("/api/v1/users/password-reset/confirm", json=payload)
+        
+    # Assertions to validate response
+    assert res.status_code == 422
+
+    
+    
+def test_confirm_password_success(mocker, client, mock_user):
+    """Test password reset confirmation with successful password update"""
+    mocker.patch.object(user_service, "get_user_by_reset_token", return_value=mock_user)
+    
+    # Define payload with valid details
+    payload = {
+        "token": "valid_token",
+        "new_password": "newpassword123",
+        "confirm_password": "newpassword123"
+    }
+    
+    # Send request to /password-reset/confirm
+    res = client.post("/api/v1/users/password-reset/confirm", json=payload)
+        
+    # Assertions to validate response
+    assert res.status_code == 200
