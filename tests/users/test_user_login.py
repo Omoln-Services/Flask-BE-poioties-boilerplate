@@ -36,10 +36,9 @@ def test_user_success_login(mocker, client, mock_user, mock_jwt_token):
     assert "token" in response_json["data"]
 
 
-
 def test_invalid_credential_login(mocker, client):
     """Mock the user_service post method to simulate a validation error response"""
-    
+
     mock_response = {
         "status_code": 401,
         "message": "Invalid email or password",
@@ -49,16 +48,13 @@ def test_invalid_credential_login(mocker, client):
     mocker.patch.object(user_service, "authenticate", return_value=mock_response)
 
     # incomplete payload to simulate validation failure
-    payload = {
-        "email": "jone@gmail.com", 
-        "password": "word123"
-    }
-    
+    payload = {"email": "jone@gmail.com", "password": "word123"}
+
     # Send POST request to /register route
     res = client.post("api/v1/users/login", json=payload)
-    
+
     response_json = res.get_json()
-    
+
     print(f"json: {response_json}")
 
     # Assertions to validate response
@@ -67,7 +63,7 @@ def test_invalid_credential_login(mocker, client):
 
 def test_Missing_credential_login(mocker, client):
     """Mock the user_service post method to simulate a validation error response"""
-    
+
     mock_response = {
         "status_code": 400,
         "message": "Email and password are required",
@@ -77,25 +73,22 @@ def test_Missing_credential_login(mocker, client):
     mocker.patch.object(user_service, "authenticate", return_value=mock_response)
 
     # incomplete payload to simulate validation failure
-    payload = {
-        "password": "word123"
-    }
-    
+    payload = {"password": "word123"}
+
     # Send POST request to /register route
     res = client.post("api/v1/users/login", json=payload)
-    
+
     response_json = res.get_json()
-    
+
     print(f"json: {response_json}")
 
     # Assertions to validate response
     assert res.status_code == 400
-    
-    
+
 
 def test_services_credential_login(mocker, client):
     """Mock the user_service post method to simulate a validation error response"""
-    
+
     mock_response = {
         "status_code": 500,
         "message": "Social login failed. Try again.",
@@ -105,16 +98,13 @@ def test_services_credential_login(mocker, client):
     mocker.patch.object(user_service, "authenticate", return_value=mock_response)
 
     # incomplete payload to simulate validation failure
-    payload = {
-        "email": "jone@gmail.com", 
-        "password": "word123"
-    }
-    
+    payload = {"email": "jone@gmail.com", "password": "word123"}
+
     # Send POST request to /register route
     res = client.post("api/v1/users/login", json=payload)
-    
+
     response_json = res.get_json()
-    
+
     print(f"json: {response_json}")
 
     # Assertions to validate response

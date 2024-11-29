@@ -49,13 +49,14 @@ def mock_jwt_token(mocker):
     return mock_token
 
 
-
 @pytest.fixture(scope="function")
 def mock_reset_link(mocker):
     """Fixture to mock password reset token generation."""
     mock_reset_link = "http://127.0.0.1:7000/api/v1/users/password-reset/verify?token=eyJpZCI6ImU5NTViMjQ1LTkxYmEtNDAyYS05Nzc4LWMzNDI3NTJhMTJiNSJ9.Z0PCGw.4bJKyWcimpRxMeL0e6x7VE4eXY8"
 
     # Mock the JWT token generation method to return the fake token
-    mocker.patch.object(user_service, "generate_reset_link", return_value=mock_reset_link)
+    mocker.patch.object(
+        user_service, "generate_reset_link", return_value=mock_reset_link
+    )
 
     return mock_reset_link

@@ -59,4 +59,3 @@ class Login(Resource):
             message="User authenticated successfully",
             data=response,
         )
-

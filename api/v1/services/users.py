@@ -144,7 +144,7 @@ class UserService(Service):
             user_data["token"] = token
 
             return user_data
-        
+
         except IntegrityError:
             db.session.rollback()
             return success_response(

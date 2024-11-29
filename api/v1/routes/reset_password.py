@@ -93,6 +93,7 @@ class PasswordResetVerify(Resource):
             status_code=200, message="valid Token", data={"user_id": user_id}
         )
 
+
 confirm_password_model = user_ns.model(
     "confirm-token",
     {
