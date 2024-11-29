@@ -2,11 +2,11 @@
 
 # imports
 from flask import Flask
-from static.flasgger_static.extension import api, init_app, swagger_blueprint
-from api.utils.config import Config
+from flask_cors import CORS
 from decouple import config
 from flask_jwt_extended import JWTManager
-from flask_cors import CORS
+from static.flasgger_static.extension import api, init_app, swagger_blueprint
+from api.utils.config import Config
 from api.db.database import db
 from api.utils.email_sender import init_mail
 
@@ -33,8 +33,9 @@ def create_app():
     jwt = JWTManager(app)
 
     # Import and add Namespaces to the Api
-    from api.v1.routes.users import user_ns
     from api.v1.routes.users_login import user_ns
+    from api.v1.routes.reset_password import user_ns
+    from api.v1.routes.users import user_ns
 
     api.add_namespace(user_ns, path="/api/v1/users")
 

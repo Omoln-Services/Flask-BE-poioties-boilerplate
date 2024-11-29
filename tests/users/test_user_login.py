@@ -65,8 +65,6 @@ def test_invalid_credential_login(mocker, client):
     assert res.status_code == 401
 
 
-
-
 def test_Missing_credential_login(mocker, client):
     """Mock the user_service post method to simulate a validation error response"""
     

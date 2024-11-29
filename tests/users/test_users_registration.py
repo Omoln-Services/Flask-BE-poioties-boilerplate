@@ -93,7 +93,7 @@ def test_register_internal_server_error(mocker, client):
 
     mocker.patch.object(user_service, "post", return_value=mock_response)
 
-    # Define a valid payload for registration
+    # payload for registration
     payload = {
         "first_name": "Alice",
         "last_name": "Smith",
