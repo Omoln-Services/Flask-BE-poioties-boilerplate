@@ -26,7 +26,6 @@ def test_reset_password_success(mocker, client, mock_user):
 
 
 
-
 def test_generate_reset_link_fake_user(mocker, client):
     """mock user successful request reset password
     """
@@ -39,10 +38,6 @@ def test_generate_reset_link_fake_user(mocker, client):
     
     # send request to /reset-password
     res = client.post("/api/v1/users/password-reset", json=payload)
-    
-    response_json = res.get_json()
-    
-    print(f"json: {response_json}")
     
     # assertions to validate response
     assert res.status_code == 404
@@ -68,6 +63,7 @@ def test_invalid_email_format(mocker, client):
     assert res.status_code == 400
 
 
+
 def test_missing_email(mocker, client):
     """Test password reset with missing email"""
     
@@ -82,6 +78,7 @@ def test_missing_email(mocker, client):
     # Assertions to validate response
     assert res.status_code == 400
     
+ 
     
 def test_verify_token_success(mocker, client, mock_user):
     """Test password reset token verification"""
@@ -103,7 +100,7 @@ def test_verify_token_success(mocker, client, mock_user):
 def test_verify_token_invalid(mocker, client):
     """Test password reset token verification with invalid token"""
     
-    # Mock the behavior of the user service to return None (indicating an invalid token)
+    # Mock the behavior of the user service to return None
     mocker.patch.object(user_service, "verify_reset_token", return_value=None)
     
     # Define invalid token payload
