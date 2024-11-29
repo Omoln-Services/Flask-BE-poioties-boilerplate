@@ -17,11 +17,21 @@ jobs:
     env:
       DB_TYPE: postgresql  
       DB_USER: poioties     
-      DB_PASSWORD: VCsrw7S4d874ZSln5TaLJAgG3MmLFFRQ
-      DB_HOST: dpg-csqkklrtq21c73dlqfn0-a.oregon-postgres.render.com
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
       DB_NAME: poioties
-      SQLALCHEMY_DATABASE_URI:  "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
+      SQLALCHEMY_DATABASE_URI:  "postgresql://$DB_USER:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}/$DB_NAME"
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      SALT: ${{ secrets.SAlT }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      MAIL_FROM: Poioties
+      MAIL_PORT: ${{ env.MAIL_PORT }}
+      MAIL_SERVER: ${{ env.MAIL_SERVER }}
+      MAIL_USE_TLS: ${{ env.MAIL_USE_TLS }}
+      MAIL_USE_SSL: ${{ env.MAIL_USE_SSL }}
+      MAIL_DEFAULT_SENDER: ${{ env.MAIL_DEFAULT_SENDER }}
+      EMAIL_SENDER: Poioties
     
     steps:
       - name: Checkout code
@@ -51,7 +61,7 @@ jobs:
       - name: Run Tests
         env:
           DB_TYPE: postgresql
-          SQLALCHEMY_DATABASE_URI: "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
+          SQLALCHEMY_DATABASE_URI: "postgresql://$DB_USER:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}/$DB_NAME"
         run: |
           pytest tests/
 
