@@ -16,22 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_TYPE: postgresql  
-      DB_USER: ${{ env.NAME }}     
+      DB_USER: ${{ vars.NAME }}     
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_HOST: ${{ secrets.DB_HOST }}
-      DB_NAME: ${{ env.NAME }}
-      SQLALCHEMY_DATABASE_URI: "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
+      DB_NAME: ${{ vars.NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      SALT: ${{ secrets.SAlT }}
+      SALT: ${{ secrets.SALT }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
       MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-      MAIL_FROM: ${{ env.NAME }}
-      MAIL_PORT: ${{ env.MAIL_PORT }}
-      MAIL_SERVER: ${{ env.MAIL_SERVER }}
-      MAIL_USE_TLS: ${{ env.MAIL_USE_TLS }}
-      MAIL_USE_SSL: ${{ env.MAIL_USE_SSL }}
-      MAIL_DEFAULT_SENDER: ${{ env.MAIL_DEFAULT_SENDER }}
-      EMAIL_SENDER: ${{ env.NAME }}
+      MAIL_FROM: ${{ vars.NAME }}
+      MAIL_PORT: ${{ vars.MAIL_PORT }}
+      MAIL_SERVER: ${{ vars.MAIL_SERVER }}
+      MAIL_USE_TLS: ${{ vars.MAIL_USE_TLS }}
+      MAIL_USE_SSL: ${{ vars.MAIL_USE_SSL }}
+      MAIL_DEFAULT_SENDER: ${{ vars.MAIL_DEFAULT_SENDER }}
+      EMAIL_SENDER: ${{ vars.NAME }}
+      SQLALCHEMY_DATABASE_URI: "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST/$DB_NAME"
+
     
     steps:
       - name: Checkout code
