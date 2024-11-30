@@ -24,8 +24,6 @@ def test_reset_password_success(mocker, client, mock_user):
     assert res.status_code == 200
 
 
-
-
 def test_generate_reset_link_fake_user(mocker, client):
     """mock user successful request reset password"""
     mocker.patch.object(user_service, "get_user_by_email", return_value=None)
