@@ -43,16 +43,13 @@ jobs:
         with:
           python-version: "3.10"
       
-      - name: Check MAIL_USERNAME
-        run: |
-          echo "MAIL_USERNAMEL: MAIL_USERNAME"
-
       - name: Check Environment Variables
         run: |
           echo "DB_TYPE: $DB_TYPE"
           echo "DB_USER: $DB_USER"
           echo "DB_NAME: $DB_NAME"
           echo "SQLALCHEMY_DATABASE_URI: $SQLALCHEMY_DATABASE_URI"
+          echo "MAIL_USERNAMEL: $MAIL_USERNAME"
 
       - name: Verify DB_TYPE
         run: echo "DB_TYPE is set to $DB_TYPE"
