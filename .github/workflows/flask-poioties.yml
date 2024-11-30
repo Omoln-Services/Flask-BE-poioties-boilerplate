@@ -19,7 +19,7 @@ jobs:
       DB_USER: ${{ secrets.USER }}     
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_HOST: ${{ secrets.DB_HOST }}
-      DB_NAME: ${{ vars.NAME }}
+      DB_NAME: ${{ secrets.USER }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       SALT: ${{ secrets.SALT }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
