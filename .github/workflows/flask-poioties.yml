@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_TYPE: postgresql  
-      DB_USER: poioties     
+      DB_USER: ${{ env.NAME }}     
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_NAME: poioties
@@ -25,13 +25,13 @@ jobs:
       SALT: ${{ secrets.SAlT }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
       MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-      MAIL_FROM: Poioties
+      MAIL_FROM: ${{ env.NAME }}
       MAIL_PORT: ${{ env.MAIL_PORT }}
       MAIL_SERVER: ${{ env.MAIL_SERVER }}
       MAIL_USE_TLS: ${{ env.MAIL_USE_TLS }}
       MAIL_USE_SSL: ${{ env.MAIL_USE_SSL }}
       MAIL_DEFAULT_SENDER: ${{ env.MAIL_DEFAULT_SENDER }}
-      EMAIL_SENDER: Poioties
+      EMAIL_SENDER: ${{ env.NAME }}
     
     steps:
       - name: Checkout code
