@@ -76,11 +76,11 @@ def test_verify_token_success(mocker, client, mock_user):
 
     # Define token payload
     payload = {
-        "token": "valid_token",
+        "token": "eyJpZCI6ImU5NTViMjQ1LTkxYmEtNDAyYS05Nzc4LWMzNDI3NTJhMTJiNSJ9.Z0PCGw.4bJKyWcimpRxMeL0e6x7VE4eXY8",
     }
 
     # Send request to /password-reset/verify
-    res = client.get("/api/v1/users/password-reset/verify", json=payload)
+    res = client.get("/api/v1/users/password-reset/verify", query_string=payload)
 
     # Assertions to validate response
     assert res.status_code == 200
