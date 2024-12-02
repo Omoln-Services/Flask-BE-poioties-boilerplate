@@ -119,7 +119,7 @@ class UserService(Service):
     def get_user_by_email(email):
         """retrieve user by email"""
         try:
-            return User.query.filter_by(email=email).first()
+            return db.session.query(User).filter_by(email=email).first()
         except Exception as e:
             db.session.rollback()
             return success_response(
@@ -131,7 +131,7 @@ class UserService(Service):
     def authenticate(self, email, password):
         """Authenticate a user by username and password"""
         try:
-            user = User.query.filter_by(email=email).first()
+            user = db.session.query(User).filter_by(email=email).first()
 
             if not user or not user.check_password(password):
                 raise ValueError("Invalid email or password")
@@ -192,7 +192,7 @@ class UserService(Service):
         try:
             serializer = URLSafeTimedSerializer(secret_key)
             data = serializer.loads(token, salt=salt)
-            user = User.query.get(data["id"])
+            user = db.session.get(User, data["id"])
             if not user:
                 raise ValueError("User not found.")
             return user

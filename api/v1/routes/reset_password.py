@@ -85,7 +85,7 @@ class PasswordResetVerify(Resource):
         user_id = user_service.verify_reset_token(token)
 
         # check if user exist
-        user = User.query.get(user_id)
+        user = db.session.get(User, user_id)
         if not user:
             return success_response(status_code=404, message="User not found.")
 
