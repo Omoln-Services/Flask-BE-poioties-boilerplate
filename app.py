@@ -2,22 +2,13 @@
 
 # imports
 from flask import Flask
-from flask_restx import Api
-from api.utils.config import Config
+from flask_cors import CORS
 from decouple import config
 from flask_jwt_extended import JWTManager
-from flask_cors import CORS
-import logging
+from static.flasgger_static.extension import api, init_app, swagger_blueprint
+from api.utils.config import Config
 from api.db.database import db
-
-
-# Create the API instance
-api = Api(
-    version="1.0",
-    title="Poioties API",
-    description="Poioties Flask API with Flask-RESTX",
-    doc="/docs",
-)
+from api.utils.email_sender import init_mail
 
 
 def create_app():
@@ -29,18 +20,21 @@ def create_app():
     # Load configurations
     app.config.from_object(Config)
 
+    # Initialize email (Flask-Mail)
+    init_mail(app)
+
     # Initialize the database with the app context
     db.init_app(app)
 
     # Set the secret key from the .env file using python-decouple
     app.secret_key = config("SECRET_KEY")
 
-    print("SQLAlchemy URI:", app.config["SQLALCHEMY_DATABASE_URI"])
-
     # Initialize JWT Manager
     jwt = JWTManager(app)
 
     # Import and add Namespaces to the Api
+    from api.v1.routes.users_login import user_ns
+    from api.v1.routes.reset_password import user_ns
     from api.v1.routes.users import user_ns
 
     api.add_namespace(user_ns, path="/api/v1/users")
@@ -65,8 +59,10 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+    # Register the blueprint without
+    app.register_blueprint(swagger_blueprint, url_prefix="/docs")
     # Initialize additional apps
-    api.init_app(app)
+    init_app(app)
 
     # Return the Flask app instance
     return app

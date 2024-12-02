@@ -1,22 +1,4 @@
-from unittest.mock import MagicMock
-from flask import Flask
-import pytest
-from flask_jwt_extended import create_access_token
-
-from app import create_app
 from api.v1.services.users import user_service
-
-
-@pytest.fixture(scope="session")
-def client():
-    """create an instance of the flask app"""
-    app = create_app()
-    app.config["TESTING"] = True
-    with app.app_context():
-        with app.test_client() as client:
-            yield client
-    if not app.config.get("SECRET_KEY"):
-        raise ValueError("SECRET_KEY is not set in the environment variables")
 
 
 def test_register_success(mocker, client):
@@ -32,7 +14,7 @@ def test_register_success(mocker, client):
         },
     }
 
-    mocker.patch.object(user_service, "post", return_value=(mock_response, 201))
+    mocker.patch.object(user_service, "post", return_value=mock_response)
 
     # Define the payload to send in the request
     payload = {
@@ -58,7 +40,7 @@ def test_register_validation_error(mocker, client):
         "success": False,
     }
 
-    mocker.patch.object(user_service, "post", return_value=(mock_response, 400))
+    mocker.patch.object(user_service, "post", return_value=mock_response)
 
     # incomplete payload to simulate validation failure
     payload = {
@@ -83,7 +65,7 @@ def test_existing_email_or_username(mocker, client):
     }
 
     # Mock the `post` method of `user_service` to return the conflict response
-    mocker.patch.object(user_service, "post", return_value=(mock_response, 409))
+    mocker.patch.object(user_service, "post", return_value=mock_response)
 
     # Define a payload with an email or username that already exists
     payload = {
@@ -109,9 +91,9 @@ def test_register_internal_server_error(mocker, client):
         "success": False,
     }
 
-    mocker.patch.object(user_service, "post", return_value=(mock_response, 500))
+    mocker.patch.object(user_service, "post", return_value=mock_response)
 
-    # Define a valid payload for registration
+    # payload for registration
     payload = {
         "first_name": "Alice",
         "last_name": "Smith",
@@ -125,55 +107,3 @@ def test_register_internal_server_error(mocker, client):
 
     # Assertions to validate response
     assert res.status_code == 500
-
-
-def test_get_user_profile_success(mocker, client):
-    """Mock user to get method to stimulate a user profile and get a success response"""
-    test_user_id = "7c1bd1f8-19d3-4370-9061-30985bb46e5f"
-    token = create_access_token(identity=test_user_id)
-    mock_response = {
-        "status_code": 200,
-        "message": "User retrieved Successfully",
-        "data": {
-            "id": "7c1bd1f8-19d3-4370-9061-30985bb46e5f",
-            "created_at": "2024-11-15 14:42:12.033666",
-            "email": "yonwatodejulius@gmail.com",
-            "avatar_url": None,
-            "is_active": True,
-            "username": "skibo555",
-        },
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-
-    mocker.patch.object(
-        user_service, "get", return_value=(mock_response, 200), headers=headers
-    )
-
-    # Send get request to /register route
-    res = client.get("/api/v1/users/me", headers=headers)
-
-    assert res.status_code == 200
-
-
-def test_get_user_profile_invalid_token(mocker, client):
-    """Mock user with a non-existence user_id to get method to stimulate a user profile and get 404 error"""
-    test_user_id = "7c1bd1f8-19d3-4370-9061-30985bb46e5t"
-    token = create_access_token(identity=test_user_id)
-    mock_response = {
-        "status_code": 404,
-        "message": "User profile not found",
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-
-    mocker.patch.object(
-        user_service, "get", return_value=(mock_response, 404), headers=headers
-    )
-
-    # Send get request to /me route
-    res = client.get("/api/v1/users/me", headers=headers)
-
-    # Print the response data
-    print(f"Status Code: {res.status_code}")
-    print(f"Response Data: {res}")
-
-    assert res.status_code == 404

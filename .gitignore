@@ -23,3 +23,4 @@ tmp/
 alembic.ini
 .flake8
 .pylintrc
+teststmp.py
