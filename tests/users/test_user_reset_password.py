@@ -1,5 +1,6 @@
 from api.v1.services.users import user_service
 from api.utils.email_sender import send_reset_email
+from api.db.database import db
 
 
 def test_reset_password_success(mocker, client, mock_user):
@@ -73,6 +74,9 @@ def test_missing_email(mocker, client):
 def test_verify_token_success(mocker, client, mock_user):
     """Test password reset token verification"""
     mocker.patch.object(user_service, "verify_reset_token", return_value=mock_user.id)
+    
+    # Mock db.session.get to avoid hitting the external database
+    mocker.patch.object(db.session, "get", return_value=mock_user)
 
     # Define token payload
     payload = {
