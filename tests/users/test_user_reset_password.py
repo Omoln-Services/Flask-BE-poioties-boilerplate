@@ -25,8 +25,6 @@ def test_reset_password_success(mocker, client, mock_user):
     assert res.status_code == 200
 
 
-
-
 def test_generate_reset_link_fake_user(mocker, client):
     """mock user successful request reset password"""
     mocker.patch.object(user_service, "get_user_by_email", return_value=None)
@@ -74,7 +72,7 @@ def test_missing_email(mocker, client):
 def test_verify_token_success(mocker, client, mock_user):
     """Test password reset token verification"""
     mocker.patch.object(user_service, "verify_reset_token", return_value=mock_user.id)
-    
+
     # Mock db.session.get to avoid hitting the external database
     mocker.patch.object(db.session, "get", return_value=mock_user)
 
@@ -88,7 +86,6 @@ def test_verify_token_success(mocker, client, mock_user):
 
     # Assertions to validate response
     assert res.status_code == 200
-
 
 
 def test_verify_token_invalid(mocker, client):
